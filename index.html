@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Trivia Game</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<style type="text/css">
+
+body{
+	background-color: #08578E;
+	font-family: courier;
+}
+
+h1{
+	margin:5px;
+}
+
+.container{
+	width:400px;
+	margin:auto;
+}
+
+#question{
+	background-color: #40ADC9;
+	margin:auto;
+	padding:5px;
+	border-radius: 10px;
+	margin:10px;
+	
+	color:white;
+}
+
+h2, h3{
+	margin: 5px;
+}
+
+.options{
+	margin:auto;
+	padding:5px;
+	border-radius: 10px;
+	margin:10px;
+	text-align: center;
+	font-size: 200%;
+	cursor: pointer;
+	background-color: #E8632C;
+}
+
+.hover:hover{
+	color: yellow;
+}
+
+.answer{
+	border: 2px solid orange;
+	color:white;
+	margin:auto;
+	padding:3px;
+	border-radius: 10px;
+	margin:8px;
+	text-align: center;
+	font-size: 200%;
+	cursor: pointer;
+	background-color: #E8632C;
+}
+
+.display{
+	background-color: #40ADC9;
+	border-radius: 10px;
+	color: yellow;
+	text-align: center;
+	font-size: 150%;
+}
+
+#footer{
+	height: 2px;
+	background-color: #40ADC9;
+	margin:auto;
+	padding:5px;
+	border-radius: 10px;
+	margin:20px 10px 10px 10px;
+	
+}
+
+span{
+	margin:5px 5px 5px 5px;
+	height:90%;
+	font-size: 200%;
+}
+
+#display{
+	float: left;
+	width:260px;
+	height:100px;
+	margin:5px 5px 5px 5px;
+	padding: 0px 0px 0px 0px;
+}
+
+p{
+	font-size: 100%;
+	margin:5px 30px 5px 30px;
+}
+
+#timer{
+	margin:5px 5px 5px 5px;
+	padding: 0px 0px 0px 0px;
+	border-radius: 10px;
+	background-color: #E8632C;
+	color: yellow;
+	float:right;
+	text-align: center;
+	height:100px;
+	width:100px;
+	font-size: 500%;	
+
+}
+
+.info{
+	padding:5px;
+}
+
+#clearfix{
+	clear: both;
+}
+
+
+#won{
+	background-color: #E8632C;
+	margin:10px;
+}
+
+#start{
+	margin-top: 150px;
+	margin:10px;
+}
+
+#lost{
+	background-color: #E8632C;
+	margin:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+<div class="container">
+<div class="display" id="start"></div>
+
+<div class="display" id="won"></div>
+<div class="display" id="lost"></div>
+<div id="question"></div>
+
+<div class="info">
+<div id="timer"></div>
+<div id="display" class="display" ></div>
+<div id="clearfix"></div>
+</div>
+
+<div class="options" id="option1"></div>
+<div class="options" id="option2"></div>
+<div class="options" id="option3"></div>
+<div class="options" id="option4"></div>
+
+<div class="" id="footer"></div>
+</div>
+
+<script type="text/javascript">
+
+$("#start").html("<h1>Click start to begin!</h1>");
+
+$("#display").hide();
+
+$("#question").hide();
+
+$(".options").hide();
+
+$("#timer").hide();
+
+$("#footer").hide();
+
+$("#start").click(function(){
+
+	nextQuestion();
+
+});
+
+var TriviaQuestions = []; //declare an array of trivia question objects
+
+//trivia question objects go here
+TriviaQuestions [0] = {
+  category: "Harry Potter",
+  question: "Question 1: In the Harry Potter books, what does Hermione's father do for a living?",
+  answer: "Dentist",
+  wrongoption1: "Lawyer",
+  wrongoption2: "Librarian",
+  wrongoption3: "University Professor"
+};
+
+TriviaQuestions [1] = {
+	category: "Star Trek",
+	question: "Question 2: In Star Trek: The Next Generation, what was Doctor Beverly Crusher's maiden name?",
+	answer: "Howard",
+	wrongoption1: "Hansen",
+	wrongoption2: "McFadden",
+	wrongoption3: "Masterson"
+};
+
+TriviaQuestions [2] = {
+  category: "Knight Rider",
+  question: "Question 3: In the 1980's TV series Knight Rider, talking car KITT has an evil twin named what?",
+  answer: "KARR",
+  wrongoption1: "KRO",
+  wrongoption2: "KRELL",
+  wrongoption3: "KIFT"
+};
+
+TriviaQuestions [3] = {
+  category: "Literature",
+  question: "Question 4: In The Hitchhiker's Guide To The Galaxy, Deep Thought calculated that the answer to the Ultimate Question of Life, the Universe, and Everything was ''42''. How long did Deep Thought take to finds this answer?",
+  answer: "7.5 million years",
+  wrongoption1: "1 billion years",
+  wrongoption2: "9 trillion years",
+  wrongoption3: "42 million years"
+};
+
+TriviaQuestions [4] = {
+  category: "Doctor Who",
+  question: "Question 5: In the BBC series Doctor Who, what is the name of the mysterious vehicle in which The Doctor and his companions travel through time and space?",
+  answer: "The Tardis",
+  wrongoption1: "The Ark",
+  wrongoption2: "The Tesseract",
+  wrongoption3: "The Vortex Manipulator"
+};
+
+TriviaQuestions [5] = {
+  category: "Star Wars",
+  question: "Question 6: In Star Wars: A New Hope, what ship seen on screen was the original design for the Millennium Falcon?",
+  answer: "Princess Leia's ship: Tantive IV",
+  wrongoption1: "The Nebulon-B Frigate: Redemption",
+  wrongoption2: "Boba Fett's ship: Slave I",
+  wrongoption3: "The Trade Federation Lucrehulk-class battleship"
+};
+
+TriviaQuestions [6] = {
+  category: "X-Men",
+  question: "Question 7: In the X-men universe what is the character Storm's real name?",
+  answer: "Ororo Munroe",
+  wrongoption1: "Carol Danvers",
+  wrongoption2: "Irene Adler",
+  wrongoption3: "Wanda Maximoff"
+};
+
+TriviaQuestions [7] = {
+  category: "Ninja Turtles",
+  question: "Question 8: In the Teenage Mutant Ninja Turles universe, evil brain Krang drives a massive robot tank called what? ",
+  answer: "The Technodome",
+  wrongoption1: "The Terminus",
+  wrongoption2: "The Mobius",
+  wrongoption3: "The Infilitrator"
+};
+
+TriviaQuestions [8] = {
+  category: "Batman",
+  question: "Question 9: in Tim Burton's 1989 film Batman, what is the name of Batman's love interest?",
+  answer: "Vicki Vale",
+  wrongoption1: "Selena Kyle",
+  wrongoption2: "Rachel Dawes",
+  wrongoption3: "Pamela Isley"
+};
+
+TriviaQuestions [9] = {
+  category: "Ducktales",
+  question: "Question 10: In Ducktales, who built Gizmoduck's armor?",
+  answer: "Gyro Gearloose",
+  wrongoption1: "Scrooge McDuck",
+  wrongoption2: "Drake Mallard",
+  wrongoption3: "Magica De Spell"
+};
+//end of trivia question objects 
+
+var won = 0; //this keeps track of the number of correct answers
+
+var lost = 0; //this keeps track of the number of incorrect answers
+
+var index = 0; //this will be used to select which object in the trivia questions array gets selected
+
+var counter;//this is the number of seconds on the countdown timer
+
+function timer(){
+
+		var count = 26;
+
+		counter = setInterval(function(){
+
+		count = count - 1;
+
+		$("#timer").html(count);//code for showing the number of seconds here
+
+		if (count == 0){
+
+			turnOffClickListeners();
+		
+			clearInterval(counter);
+
+			index = index + 1; 
+
+			$("#display").html("<h2>Time<br>Up!</h2>");//code for showing time is over
+
+			setTimeout(function(){nextQuestion();}, 2000);//loads next question
+
+		}
+
+	}, 1000);//1000 will  run it every 1 second
+
+};
+
+//function to load the next question
+function nextQuestion(argument){ 
+
+	$(".options").addClass("hover");
+
+	$("#display").show();
+
+	$("#timer").show();
+
+	$("#timer").html("&#x2605");
+
+	$("#start").hide();
+
+	$(".options").show();
+
+	$("#question").show();
+
+	$("#footer").show();
+
+	$("#option1").fadeTo("slow",1);
+
+	$("#option2").fadeTo("slow",1);
+
+    $("#option3").fadeTo("slow",1);
+
+    $("#option4").fadeTo("slow",1);
+
+	turnOnClickListeners();
+	
+	$(".options").on();
+
+	$("#start").html("");
+
+	if (index > (TriviaQuestions.length - 1)){//clears the display if the game is over
+		
+		clearInterval(counter);
+
+		turnOffClickListeners();
+
+		clearInterval(counter);
+
+		$("#question").hide();
+
+		$("#start").show();
+
+		$("#start").html("<h1>Click to play again!</h1>");
+
+		$(".options").hide();
+
+		$("#footer").show();
+
+		$("#display").html("<span>Game Over</span>");
+
+		$("#won").html("<h2>Correct: "+won+"</h2>");
+
+		$("#lost").html("<h2>Incorrect: "+lost+"</h2>");
+
+		$(".options").html("");
+
+		$("#option1").removeClass("answer");
+
+		$("#question").html("");
+
+		$("#timer").html("&#x2605");//code for showing time is over
+
+		console.log("Game Over");
+
+		index = 0;//resets the selection index
+
+		won = 0; //resets the score
+
+		lost = 0;//resets the score
+
+		}else{
+
+		$("#display").html("<h2>Trivia Challenge</h2>");	
+
+		$("#won").html(" ");
+
+		$("#lost").html(" ");	
+	
+		timer();//starts the timer
+
+		$("#option1").removeClass("answer");
+
+		//randomly select a question to display to the user, if the question has already been answered, select another question, some day I'll come back and finish this
+
+		// var selectionIndex = TriviaQuestions[Math.floor(Math.random()*TriviaQuestions.length)];
+		// var index = 0;
+
+		var selectionIndex = TriviaQuestions[index];
+
+		console.log("The answer is: "+selectionIndex.answer);
+
+		//display the question to the user
+		$("#question").html("<h2>"+selectionIndex.question+"</h2>");
+
+			$("#display").html("<h3>Category is: "+selectionIndex.category+"</h3>");	
+
+		//this code randmly places the answers on the page
+		var options = $(".options");
+
+		console.log(options.length);
+
+		for(var i = 0; i < options.length; i++){
+		    
+			var target = Math.floor(Math.random() * options.length -1) + 1;
+		    
+			var target2 = Math.floor(Math.random() * options.length -1) + 1;
+		    
+		    options.eq(target).before(options.eq(target2)); //honestly no idea what this code does I found it on the internet when I googled how to make divs appear randomly on the page
+		};
+
+		$("#option1").html(selectionIndex.answer);
+
+		$("#option2").html(selectionIndex.wrongoption1);
+
+		$("#option3").html(selectionIndex.wrongoption2);
+
+		$("#option4").html(selectionIndex.wrongoption3);
+
+	}
+}; 
+
+//what happens when the correct answer is clicked
+function didClickCorrectAnswer() {
+
+    $("#display").html("<span>CORRECT!</span>");//lets the user know they got the answer right
+
+    $("#option1").addClass("answer");//uses a class cange to highlight the correct answer
+
+    $(".options").removeClass("hover");
+
+    $("#option2").fadeTo("slow",0.5);
+
+    $("#option3").fadeTo("slow",0.5);
+
+    $("#option4").fadeTo("slow",0.5);
+    
+    won = won + 1; //add 1 to the wins counter
+
+    index = index + 1; //advance to select the next question
+
+    clearInterval(counter);
+
+    turnOffClickListeners();
+
+    setTimeout(function(){nextQuestion();}, 4000);//wait four seconds then display a new question
+
+};
+
+//what happens when the incorrect answer is clicked
+function didClickIncorrectAnswer() {
+
+	clearInterval(counter);
+
+	turnOffClickListeners();
+
+	$("#display").html("<p>INCORRECT! The correct answer is: </p>");
+
+	$("#option1").addClass("answer");
+
+	$(".options").removeClass("hover");
+
+	$("#option2").fadeTo("slow",0.5);
+
+    $("#option3").fadeTo("slow",0.5);
+
+    $("#option4").fadeTo("slow",0.5);
+
+	lost = lost + 1;
+
+    index = index + 1;;//calls the function to execut when the question is incorrect
+
+    setTimeout(function(){nextQuestion(); }, 4000);
+
+};
+
+//this tells the game to listen for the button to be clicked
+function turnOnClickListeners() {
+
+$("#option1").on("click", didClickCorrectAnswer);
+
+$("#option2").on("click", didClickIncorrectAnswer);
+
+$("#option3").on("click", didClickIncorrectAnswer);
+
+$("#option4").on("click", didClickIncorrectAnswer);
+
+};
+
+
+function turnOffClickListeners() { //turns off the click listeners once so the timer doesnt get wonky
+$(".options").off("click");
+console.log("clickoff")
+};
+
+
+</script>
+
+
+
+</body>
+
+</html>
