@@ -168,6 +168,8 @@ p{
 
 <script type="text/javascript">
 
+	//all of this happens when the game starts
+
 $("#start").html("<h1>Click start to begin!</h1>");
 
 $("#display").hide();
@@ -255,7 +257,7 @@ TriviaQuestions [6] = {
 TriviaQuestions [7] = {
   category: "Ninja Turtles",
   question: "Question 8: In the Teenage Mutant Ninja Turles universe, evil brain Krang drives a massive robot tank called what? ",
-  answer: "The Technodome",
+  answer: "The Technodrome",
   wrongoption1: "The Terminus",
   wrongoption2: "The Mobius",
   wrongoption3: "The Infilitrator"
@@ -288,9 +290,9 @@ var index = 0; //this will be used to select which object in the trivia question
 
 var counter;//this is the number of seconds on the countdown timer
 
-function timer(){
+function timer(){ //time function
 
-		var count = 26;
+		var count = 21; //starting it at 21 so that the time will start displaying at 20 instead of 19, looks more user friendly
 
 		counter = setInterval(function(){
 
@@ -300,11 +302,11 @@ function timer(){
 
 		if (count == 0){
 
-			turnOffClickListeners();
+			turnOffClickListeners(); //disables the buttons so the game doesnt take anymore inuputs 
 		
-			clearInterval(counter);
+			clearInterval(counter); //stops the counter
 
-			index = index + 1; 
+			index = index + 1; //this is adding ot the counter so the game advances to the next question
 
 			$("#display").html("<h2>Time<br>Up!</h2>");//code for showing time is over
 
@@ -319,7 +321,7 @@ function timer(){
 //function to load the next question
 function nextQuestion(argument){ 
 
-	$(".options").addClass("hover");
+	$(".options").addClass("hover");//changes the color whenever the user hovers
 
 	$("#display").show();
 
@@ -335,7 +337,7 @@ function nextQuestion(argument){
 
 	$("#footer").show();
 
-	$("#option1").fadeTo("slow",1);
+	$("#option1").fadeTo("slow",1);//fades the wrong answers out
 
 	$("#option2").fadeTo("slow",1);
 
@@ -513,10 +515,7 @@ $(".options").off("click");
 console.log("clickoff")
 };
 
-
 </script>
-
-
 
 </body>
 
